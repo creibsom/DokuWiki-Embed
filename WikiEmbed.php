@@ -617,7 +617,9 @@ Class Wiki_Embed {
 		// Remove unwanted parts
 		$url = $this->remove_action_render( $get_url );
 		$url = str_replace( "&#038;","&", $url );
-		$url = str_replace( "&amp;","&", $url );	
+		$url = str_replace( "&amp;","&", $url );
+		// get raw HTML data for DokuWiki compatability
+		$url = $url . "&do=export_xhtmlbody";	
 		$url_array = explode( "#", $url );
 		
 		return $url_array[0];
@@ -706,6 +708,7 @@ Class Wiki_Embed {
 				//render page content
 				$wiki_page_body = $this->render( $wiki_page_id, $wiki_page_body, $has_no_edit, $has_no_contents , $has_no_infobox, $has_accordion, $has_tabs, $remove );
 				$worked = $this->update_cache( $wiki_page_id, $wiki_page_body, $update );
+				echo $wiki_page_body;
 			} else { //Failed, (and there's no cache available) so show an error
 				$update = 0;	//Set the expiry offset to 0 (now) to try again next time the page is loaded
 				return '<span class="alert">
