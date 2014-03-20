@@ -43,12 +43,13 @@ function wikiembed_overlay_popup_form() {
 				var wikiEmbedSource 	= ( jQuery("#wiki-embed-display-links").attr('checked') ? jQuery("#wiki-embed-display-links").attr('value') : "" );
 				var wikiEmbedOverlay 	= ( jQuery("#wiki-embed-overlay").attr('checked')       ? jQuery("#wiki-embed-overlay").attr('value')       : "" );
 				var wikiEmbedTabs 		= ( jQuery("input:radio[name=wiki-embed-tabs]:checked") ? jQuery("input:radio[name=wiki-embed-tabs]:checked").attr('value') : "" );
+				var wikiEmbedType = ( jQuery("input:radio[name=wiki-embed-type]:checked") ? jQuery("input:radio[name=wiki-embed-type]:checked").attr('value') : "");
 				var wikiEmbedNoEdit 	= ( jQuery("#wiki-embed-edit").attr('checked')          ? jQuery("#wiki-embed-edit").attr('value')          : "" );
 				var wikiEmbedNoContents = ( jQuery("#wiki-embed-contents").attr('checked')      ? jQuery("#wiki-embed-contents").attr('value')      : "" );
 				var wikiEmbedNoInfobox  = ( jQuery("#wiki-embed-infobox").attr('checked')       ? jQuery("#wiki-embed-infobox").attr('value')       : "" );
 				var win = parent;
 				
-				win.send_to_editor( "[wiki-embed url='"+wikiEmbedUrl+"' "+ wikiEmbedSource + wikiEmbedOverlay + wikiEmbedTabs + wikiEmbedNoEdit + wikiEmbedNoContents + wikiEmbedNoInfobox +" ]" );
+				win.send_to_editor( "[wiki-embed url='"+wikiEmbedUrl+"' "+ wikiEmbedSource + wikiEmbedOverlay + wikiEmbedTabs + wikiEmbedNoEdit + wikiEmbedNoContents + wikiEmbedNoInfobox + wikiEmbedType + " ]" );
 			}
 		</script>
 		
@@ -65,11 +66,20 @@ function wikiembed_overlay_popup_form() {
 								</th>
 								<td class="field"><input type="text" aria-required="true" value="http://" name="wiki-embed-src" id="wiki-embed-src" size="60"><br /><br /></td>
 							</tr>
-							
-							<?php if ( $wikiembed_options['tabs'] ): ?>
+
 								<tr>
 									<th valign="top" class="label" scope="row">
 									</th>
+									<td class="field"><input type="radio" name="wiki-embed-type" value=" dokuWiki" class="wiki-embed-type" id="dokuWiki" <?php checked($wikiembed_options['default']['type'], 1); ?> />
+									<span><label for="wiki-embed-type">DokuWiki Page</label></span></td></tr>
+									<tr><th valign="top" class="label" scope="row">
+									</th><td class="field"><input type="radio" name="wiki-embed-type" value=" mediaWiki" class="wiki-embed-type" id="mediaWiki" <?php checked($wikiembed_options['default']['type'], 0); ?> />
+									<span><label for="wiki-embed-type">MediaWiki Page</label></span></td></tr>
+							
+							<?php if ( $wikiembed_options['tabs'] ): ?>
+									<tr><th valign="top" class="label" scope="row">
+									</th>
+
 									<td class="field"><input type="radio" name="wiki-embed-tabs" value=" tabs" class="wiki-embed-tabs" id="wiki-embed-tabs" <?php checked( $wikiembed_options['default']['tabs'],1 ); ?> />
 									<span><label for="wiki-embed-tabs">Convert section headings to tabs</label></span>
 									</td>
