@@ -618,8 +618,6 @@ Class Wiki_Embed {
 		$url = $this->remove_action_render( $get_url );
 		$url = str_replace( "&#038;","&", $url );
 		$url = str_replace( "&amp;","&", $url );
-		// get raw HTML data for DokuWiki compatability
-		if($this->options['default']['type'] == 0) $url = $url . "&do=export_xhtmlbody";	
 		$url_array = explode( "#", $url );
 		
 		return $url_array[0];
