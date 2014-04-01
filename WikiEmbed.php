@@ -704,7 +704,7 @@ Class Wiki_Embed {
 			
 			if ( $wiki_page_body ) { // Successfully grabbed remote contnet
 				//render page content
-				$wiki_page_body = $this->render( $wiki_page_id, $wiki_page_body, $has_no_edit, $has_no_contents , $has_no_infobox, $has_accordion, $has_tabs, $remove );
+				$wiki_page_body = $this->render( $url, $wiki_page_id, $wiki_page_body, $has_no_edit, $has_no_contents , $has_no_infobox, $has_accordion, $has_tabs, $remove );
 				$worked = $this->update_cache( $wiki_page_id, $wiki_page_body, $update );
 				echo $wiki_page_body;
 			} else { //Failed, (and there's no cache available) so show an error
@@ -942,7 +942,7 @@ Class Wiki_Embed {
 	 * @param mixed $has_tabs
 	 * @return void
 	 */
-	function render( $wiki_page_id, $wiki_page_body, $has_no_edit, $has_no_contents, $has_no_infobox, $has_accordion, $has_tabs, $remove ) {
+	function render( $url, $wiki_page_id, $wiki_page_body, $has_no_edit, $has_no_contents, $has_no_infobox, $has_accordion, $has_tabs, $remove ) {
 		
 		if ( $has_no_edit || $has_no_contents || $has_no_infobox || $has_accordion || $has_tabs || $remove ) {
 			require_once( WIKI_EMBED_ROOT."/inc/css_selector.php" );	//for using CSS selectors to query the DOM (instead of xpath)
@@ -987,6 +987,15 @@ Class Wiki_Embed {
 				}
 			} // end of removing of the elements 
 			
+$url = preg_replace('&do=export_xhtmlbody', '', $url);
+$imgs = $DOM->getElementsByTagName('img');
+foreach($imgs as $img){
+    $src = $img->getAttribute('src');
+    if(strpos($src, $url) !== 0){
+        $img->setAttribute('src', $url . $src);
+    }
+}
+
 			//Strip out undesired tags that DOMDocument automaticaly adds
 			$wiki_page_body = preg_replace( array( '/^<!DOCTYPE.+?>/u','/<\?.+?\?>/' ), array( '', '' ), str_replace( array( '<html>', '</html>', '<body>', '</body>' ), array( '', '', '', '' ), $html->saveHTML() ) );
 			
@@ -1096,7 +1105,7 @@ Class Wiki_Embed {
 			}
 			
 			$wiki_page_body = $article_intro . $start . $articles_content . '</div>';
-		} // end of content modifications 
+		}
 		
 		//clear the error buffer since we're not interested in handling minor HTML errors here
 		libxml_clear_errors();
@@ -1384,7 +1393,7 @@ Class Wiki_Embed {
 		
 		if ( $wiki_page_body ) { // Successfully grabbed remote content
 			//render page content
-			$wiki_page_body = $this->render( $wiki_page_id, $wiki_page_body, $has_no_edit, $has_no_contents , $has_no_infobox, $has_accordion, $has_tabs, $remove );
+			$wiki_page_body = $this->render( $url, $wiki_page_id, $wiki_page_body, $has_no_edit, $has_no_contents , $has_no_infobox, $has_accordion, $has_tabs, $remove );
 			$this->update_cache( $wiki_page_id,  $wiki_page_body, $update );
 		}
 	}
