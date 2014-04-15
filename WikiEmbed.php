@@ -986,16 +986,27 @@ Class Wiki_Embed {
 					}
 				}
 			} // end of removing of the elements 
-			
-$url = preg_replace('&do=export_xhtmlbody', '', $url);
-$imgs = $DOM->getElementsByTagName('img');
+if(strpos($src, '&do=export_xhtmlbody') !== false) {			
+$url = substr($url, 0, strpos($url, '&do=export_xhtmlbody'));
+$base_url = substr($url, 0, strpos($url, '/', strpos($url, '//') + 2));
+$imgs = $html->getElementsByTagName('img');
 foreach($imgs as $img){
     $src = $img->getAttribute('src');
-    if(strpos($src, $url) !== 0){
+    if(strpos($src, "/lib/exe/fetch.php") !== false) {
+	$img->setAttribute('src', $base_url . $src);
+    }
+    else if(strpos($src, $url) === false && strcmp(substr($src, 0, 1), "/") === 0){
         $img->setAttribute('src', $url . $src);
     }
 }
-
+$a_tags = $html->getElementsByTagName('a');
+foreach($a_tags as $a_tag){
+	$href = $a_tag->getAttribute('href');
+	if(strcmp(substr($href, 0, 1), "/") === 0) {
+		$a_tag->setAttribute('href', $base_url . $href);
+	}
+}
+}
 			//Strip out undesired tags that DOMDocument automaticaly adds
 			$wiki_page_body = preg_replace( array( '/^<!DOCTYPE.+?>/u','/<\?.+?\?>/' ), array( '', '' ), str_replace( array( '<html>', '</html>', '<body>', '</body>' ), array( '', '', '', '' ), $html->saveHTML() ) );
 			
