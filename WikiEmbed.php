@@ -986,7 +986,8 @@ Class Wiki_Embed {
 					}
 				}
 			} // end of removing of the elements 
-if(strpos($src, '&do=export_xhtmlbody') !== false) {			
+if(strpos($url, '&do=export_xhtmlbody') !== false) {
+echo "inside";	
 $url = substr($url, 0, strpos($url, '&do=export_xhtmlbody'));
 $base_url = substr($url, 0, strpos($url, '/', strpos($url, '//') + 2));
 $imgs = $html->getElementsByTagName('img');
